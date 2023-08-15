@@ -81,11 +81,11 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("Largo");
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("Ancho");
 
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("Espesor");
 
         jButton3.setText("Borrar Tabla");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -160,10 +160,8 @@ public class Ventana extends javax.swing.JFrame {
             File selectedFile = fileChooser.getSelectedFile();
             String linea;
             while ((linea = br.readLine()) != null) {
+                linea = linea.replaceAll("\\,",".");
                 String[] InfoStock = linea.split(";");
-                for (int i = 1; i < 4; i++) {
-                    InfoStock[i] = InfoStock[i].replaceAll(",",".");
-                }
                 TablaModelo.addRow(InfoStock);
 
             }
@@ -173,9 +171,9 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-           /* por hacer: que logre comparar los otros textfield*/
-           //double LargoBuscar = Double.parseDouble(jTextField1.getText());
-           // double AnchoBuscar = Double.parseDouble(jTextField2.getText());
+           /* por hacer: que logre comparar anchoBuscar con Largo y viceversa*/
+           double LargoBuscar = Double.parseDouble(jTextField1.getText());
+           double AnchoBuscar = Double.parseDouble(jTextField2.getText());
             double EspesorBuscar = Double.parseDouble(jTextField3.getText());
             try {
             DefaultTableModel TablaModelo = (DefaultTableModel) jTable1.getModel();
@@ -184,15 +182,13 @@ public class Ventana extends javax.swing.JFrame {
             BufferedReader br = new BufferedReader(fr);
             String linea;
             while ((linea = br.readLine()) != null) {
+                linea = linea.replaceAll("\\,",".");
                 String[] InfoStock = linea.split(";");
                 
-                //double Ancho = Double.parseDouble(InfoStock[1]);
-                //double Largo = Double.parseDouble(InfoStock[2]);
+                double Largo = Double.parseDouble(InfoStock[1]);
+                double Ancho = Double.parseDouble(InfoStock[2]);
                 double Espesor = Double.parseDouble(InfoStock[3]);
-                for (int i = 1; i < 4; i++) {
-                        InfoStock[i] = InfoStock[i].replaceAll(",",".");
-                }
-                if (EspesorBuscar == Espesor) {
+                if ((LargoBuscar <= Largo) && (AnchoBuscar <= Ancho) /*&& (LargoBuscar <= Ancho) && (AnchoBuscar <= Largo)*/ && (EspesorBuscar == Espesor)) {
                         TablaModelo.addRow(InfoStock);
                     }
             }

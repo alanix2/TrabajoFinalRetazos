@@ -5,11 +5,13 @@
  */
 package trabajoretazos;
 
+import com.sun.javafx.fxml.ParseTraceElement;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
@@ -46,6 +48,8 @@ public class Ventana extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -55,10 +59,25 @@ public class Ventana extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Código de retazo", "Largo", "Ancho", "Espesor"
+                "Código de retazo", "Largo", "Ancho", "Espesor", "Deperdicio  "
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+            jTable1.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jButton1.setText("Cargar");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -94,17 +113,26 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Ruta del archivo:");
+
+        jButton4.setText("Restaurar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
@@ -115,31 +143,42 @@ public class Ventana extends javax.swing.JFrame {
                             .addComponent(jTextField2)
                             .addComponent(jTextField3))
                         .addGap(47, 47, 47)
-                        .addComponent(jButton3)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 18, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(jLabel3)
-                .addGap(1, 1, 1)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(1, 1, 1)
+                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButton4))
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(jButton3))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(224, 224, 224)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -163,11 +202,17 @@ public class Ventana extends javax.swing.JFrame {
                 linea = linea.replaceAll("\\,",".");
                 String[] InfoStock = linea.split(";");
                 TablaModelo.addRow(InfoStock);
-
-            }
             
+            }
+            jLabel4.setText(fileChooser.getSelectedFile().getAbsolutePath());
         } catch (HeadlessException | IOException e) {
-        }
+            System.out.println("Hubo un fallo, padre");
+        }catch (NumberFormatException ex) {
+        System.out.println("Error: Número inválido encontrado en el archivo." +ex);
+    } catch (Exception ex) {
+        System.out.println("Error al leer el archivo: " + ex.getMessage());
+    }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -175,26 +220,48 @@ public class Ventana extends javax.swing.JFrame {
            double LargoBuscar = Double.parseDouble(jTextField1.getText());
            double AnchoBuscar = Double.parseDouble(jTextField2.getText());
             double EspesorBuscar = Double.parseDouble(jTextField3.getText());
+            
             try {
             DefaultTableModel TablaModelo = (DefaultTableModel) jTable1.getModel();
-            File archivo = new File("C:\\Users\\Alumnos\\Documents\\retazos.txt");
+            TablaModelo.setRowCount(0);
+            String RutaA =jLabel4.getText();
+            
+            File archivo = new File(RutaA);
             FileReader fr = new FileReader(archivo);
             BufferedReader br = new BufferedReader(fr);
             String linea;
             while ((linea = br.readLine()) != null) {
+                
                 linea = linea.replaceAll("\\,",".");
                 String[] InfoStock = linea.split(";");
                 
                 double Largo = Double.parseDouble(InfoStock[1]);
                 double Ancho = Double.parseDouble(InfoStock[2]);
                 double Espesor = Double.parseDouble(InfoStock[3]);
-                if ((LargoBuscar <= Largo) && (AnchoBuscar <= Ancho) /*&& (LargoBuscar <= Ancho) && (AnchoBuscar <= Largo)*/ && (EspesorBuscar == Espesor)) {
-                        TablaModelo.addRow(InfoStock);
+                //double Deperdicio = Double.parseDouble(InfoStock[4]);
+                if ((LargoBuscar <= Largo) && (AnchoBuscar <= Ancho) && (EspesorBuscar == Espesor)) {
+                    TablaModelo.addRow(InfoStock);
+                    }if((LargoBuscar <= Ancho) && (AnchoBuscar <= Largo) && (EspesorBuscar == Espesor)){
+                    TablaModelo.addRow(InfoStock);
+                    }if((LargoBuscar <= Espesor) && (AnchoBuscar <= Largo) && (EspesorBuscar == Ancho)){
+                    TablaModelo.addRow(InfoStock);
+                     }if((LargoBuscar <= Ancho) && (AnchoBuscar <= Espesor) && (EspesorBuscar == Largo)){
+                    TablaModelo.addRow(InfoStock);
+                    }if((LargoBuscar <= Largo) && (AnchoBuscar <= Espesor) && (EspesorBuscar == Ancho)){
+                    TablaModelo.addRow(InfoStock);
                     }
+                       
+                
             }
             
-        } catch (HeadlessException | IOException e) {
-        }
+        } catch (HeadlessException | IOException ex){
+                System.out.println("Hubo un fallo, padre");
+        }catch (NumberFormatException ex) {
+        System.out.println("Error: Número inválido encontrado en el archivo." +ex);
+    } catch (Exception ex) {
+        System.out.println("Error al leer el archivo: " + ex.getMessage());
+    }
+            
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -205,6 +272,38 @@ public class Ventana extends javax.swing.JFrame {
         DefaultTableModel TablaModelo = (DefaultTableModel) jTable1.getModel();
         TablaModelo.setRowCount(0);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    
+    try {
+        String RutaA =jLabel4.getText();
+           DefaultTableModel TablaModelo = (DefaultTableModel) jTable1.getModel();
+            JFileChooser fileChooser = new JFileChooser(RutaA);
+            fileChooser.setCurrentDirectory(new File(RutaA));
+            int result = fileChooser.showOpenDialog(null);
+            File archivo = new File(RutaA);
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                linea = linea.replaceAll("\\,",".");
+                String[] InfoStock = linea.split(";");
+                TablaModelo.addRow(InfoStock);
+            
+            }
+                
+            
+            
+        } catch (HeadlessException | IOException ex){
+                System.out.println("Hubo un fallo, padre");
+        }catch (NumberFormatException ex) {
+        System.out.println("Error: Número inválido encontrado en el archivo." +ex);
+    } catch (Exception ex) {
+        System.out.println("Error al leer el archivo: " + ex.getMessage());
+    }
+            
+                                           
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -246,9 +345,11 @@ public class Ventana extends javax.swing.JFrame {
     public javax.swing.JButton jButton1;
     public javax.swing.JButton jButton2;
     public javax.swing.JButton jButton3;
+    public javax.swing.JButton jButton4;
     public javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel3;
+    public javax.swing.JLabel jLabel4;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTable jTable1;
     public javax.swing.JTextField jTextField1;
